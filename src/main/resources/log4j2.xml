@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="filename">NotesAPI.log</Property>
+    <Property name="trafficFilename">NotesAPITraffic.log</Property>
+    <Property name="defaultPattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{3} %marker- %msg%n</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${defaultPattern}" />
+      <Filters>
+        <MarkerFilter marker="TRAFFIC" onMatch="DENY" onMismatch="ACCEPT" />
+      </Filters>
+    </Console>
+
+    <Console name="Error" target="SYSTEM_ERR">
+      <PatternLayout pattern="${defaultPattern}" />
+      <Filters>
+        <MarkerFilter marker="TRAFFIC" onMatch="DENY" onMismatch="ACCEPT" />
+      </Filters>
+    </Console>
+
+    <RollingFile name="RollingFile" fileName="${filename}" filePattern="${filename}.%i">
+      <PatternLayout pattern="${defaultPattern}" />
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="25 MB" />
+      </Policies>
+      <DefaultRolloverStrategy max="4" fileIndex="min" />
+    </RollingFile>
+
+    <RollingFile name="TrafficFile" fileName="${trafficFilename}" filePattern="${trafficFilename}.%i">
+      <PatternLayout pattern="${defaultPattern}" />
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="25 MB" />
+      </Policies>
+      <DefaultRolloverStrategy max="4" fileIndex="min" />
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+    <!-- turn down logging for jersey -->
+    <Logger name="org.glassfish" level="WARN" />
+    <Logger name="org.jvnet" level="WARN" />
+    <Logger name="io.swagger" level="WARN" />
+    <Logger name="javax.management" level="WARN" />
+
+    <!-- Put traffic logs in their own file -->
+    <Logger name="herr.andrewh.notesapi.Traffic" level="INFO" additivity="false">
+      <AppenderRef ref="TrafficFile" />
+    </Logger>
+
+    <Root level="INFO">
+      <AppenderRef ref="Console" level="ALL" />
+      <AppenderRef ref="Error" level="ERROR" />
+      <AppenderRef ref="RollingFile" level="ALL" />
+    </Root>
+  </Loggers>
+</Configuration>

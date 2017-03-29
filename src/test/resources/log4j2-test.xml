@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="defaultPattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{3} %marker- %msg%n</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${defaultPattern}" />
+    </Console>
+
+    <Console name="Error" target="SYSTEM_ERR">
+      <PatternLayout pattern="${defaultPattern}" />
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <!-- turn down logging for jersey -->
+    <Logger name="org.glassfish" level="WARN" />
+    <Logger name="org.jvnet" level="WARN" />
+    <Logger name="io.swagger" level="WARN" />
+    <Logger name="javax.management" level="WARN" />
+    <Logger name="zaxxer" level="WARN" />
+    <Logger name="dbunit" level="ERROR" />
+
+    <Root level="INFO">
+      <AppenderRef ref="Console" level="ALL" />
+      <AppenderRef ref="Error" level="ERROR" />
+    </Root>
+  </Loggers>
+</Configuration>
